@@ -35,6 +35,11 @@ Y2024Day07 >> line: anInteger [
 Y2024Day07 >> parse: aString [
 	"parse input data and store the result into local variables"
 
-	lines := Array new.
+	| number line numbers parser |
+	number := #digit asPParser star token trim ==> [ :token | token value asNumber ].
+	numbers := (number separatedBy: #space asPParser) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].
+	line := (number trim: ': ' asPParser) , numbers.
+	parser := (line delimitedBy: #newline asPParser) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].
+	lines := parser parse: aString.
 	^ true
 ]

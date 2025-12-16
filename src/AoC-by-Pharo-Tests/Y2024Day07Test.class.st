@@ -11,7 +11,5 @@ Y2024Day07Test >> testParse [
 
 	| solver |
 	solver := Y2024Day07 new.
-
-	self assert: (solver parse: '') equals: true.
-
+	self assert: (solver parse: '')
 ]
