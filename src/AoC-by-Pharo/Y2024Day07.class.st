@@ -102,12 +102,58 @@ Y2024Day07 >> part2 [
 							             acc
 								             add: val + each;
 								             add: val * each;
-								             add: (self shift: val and: each);
+								             add: (self shift: val and: each whichOriginal: each);
 								             yourself ].
 					   values := values select: [ :val | val <= target ] ].
 			   (values includes: target)
 				   ifTrue: [ target ]
 				   ifFalse: [ 0 ] ]) sum
+]
+
+{ #category : 'executing' }
+Y2024Day07 >> part2a [
+
+    ^ (lines collect: [ :setting |
+               | target values |
+               "292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20"
+               target := setting first.
+               values := Set new add: setting last first; yourself.
+               self searchFrom: setting last first with: setting last allButFirst to: target ]) sum
+]
+
+{ #category : 'executing' }
+Y2024Day07 >> part2startFrom: aNumber with: numbers to: target [
+	"self part2startFrom: 11 with { 6. 16. 20 } to: 292 means 292: 11 + 6 * 16 + 20"
+
+	| values |
+	values := Set new add: aNumber; yourself.
+	numbers do: [ :each |
+			values := values inject: Set new
+				          into: [ :acc :val |
+				          acc add: val + each; add: val * each; add: (self shift: val and: each whichOriginal: each); yourself ].
+			values := values select: [ :val | val <= target ] ].
+	(values includes: target) ifTrue: [ ^ target ]
+		ifFalse: [ ^ 0 ]
+]
+
+{ #category : 'executing' }
+Y2024Day07 >> searchFrom: aNumber with: numbers to: target [
+
+    | toVisit goalState |
+    goalState := { target. numbers size + 1 }.
+    toVisit := Heap new sortBlock: [ :a :b | a first > b first ]; add: { aNumber. 1 }; yourself.
+    [ toVisit isNotEmpty ] whileTrue: [
+            | state |
+            state := toVisit removeFirst.
+            state last = goalState last ifTrue: [ state first = goalState first ifTrue: [ ^ target ] ]
+                ifFalse: [
+                        | operand |
+                        operand := numbers at: state last.
+                        toVisit addAll:
+                            ({ state first + operand. state first * operand. self shift: state first and: operand } select: [
+                                 :next | next <= target ]
+                                 thenCollect: [ :val | { val. state last + 1 } ]) ] ].
+    ^ 0
 ]
 
 { #category : 'evaluating' }
