@@ -9,9 +9,9 @@ Class {
 	#instVars : [
 		'lines'
 	],
-	#category : 'Advent-of-Code-Puzzle',
+	#category : 'Advent-of-Code-Y2024',
 	#package : 'Advent-of-Code',
-	#tag : 'Puzzle'
+	#tag : 'Y2024'
 }
 
 { #category : 'tests' }
@@ -28,15 +28,6 @@ Y2024Day07 class >> test1 [
 192: 17 8 14
 21037: 9 7 18 13
 292: 11 6 16 20'
-]
-
-{ #category : 'reading' }
-Y2024Day07 >> getInputData [
-
-	| data |
-	data := '/Users/nash/Repositories/advent-of-code/data/2024/input-day07.txt' asFileReference contents.
-	"self parse: data."
-	^ data
 ]
 
 { #category : 'reading' }
