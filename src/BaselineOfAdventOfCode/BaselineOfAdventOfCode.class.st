@@ -1,12 +1,12 @@
 Class {
-	#name : 'BaselineOfAoCByPharo',
+	#name : 'BaselineOfAdventOfCode',
 	#superclass : 'BaselineOf',
 	#category : 'BaselineOfAdventOfCode',
 	#package : 'BaselineOfAdventOfCode'
 }
 
 { #category : 'baselines' }
-BaselineOfAoCByPharo >> baseline: spec [
+BaselineOfAdventOfCode >> baseline: spec [
 
     <baseline>
     spec for: #common do: [
