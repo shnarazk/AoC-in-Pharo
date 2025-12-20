@@ -9,8 +9,8 @@ Class {
 	#instVars : [
 		'lines'
 	],
-	#category : 'AoC-by-Pharo-Puzzle',
-	#package : 'AoC-by-Pharo',
+	#category : 'Advent-of-Code-Puzzle',
+	#package : 'Advent-of-Code',
 	#tag : 'Puzzle'
 }
 

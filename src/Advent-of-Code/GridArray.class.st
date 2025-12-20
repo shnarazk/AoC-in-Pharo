@@ -7,8 +7,8 @@ Class {
 		'height',
 		'initValue'
 	],
-	#category : 'AoC-by-Pharo-Tool',
-	#package : 'AoC-by-Pharo',
+	#category : 'Advent-of-Code-Tool',
+	#package : 'Advent-of-Code',
 	#tag : 'Tool'
 }
 

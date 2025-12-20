@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'heap'
 	],
-	#category : 'AoC-by-Pharo-Tests-Tool',
-	#package : 'AoC-by-Pharo-Tests',
+	#category : 'Advent-of-Code-Tests-Tool',
+	#package : 'Advent-of-Code-Tests',
 	#tag : 'Tool'
 }
 

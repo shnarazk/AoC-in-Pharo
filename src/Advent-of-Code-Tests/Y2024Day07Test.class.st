@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'solver'
 	],
-	#category : 'AoC-by-Pharo-Tests-Puzzle',
-	#package : 'AoC-by-Pharo-Tests',
+	#category : 'Advent-of-Code-Tests-Puzzle',
+	#package : 'Advent-of-Code-Tests',
 	#tag : 'Puzzle'
 }
 
