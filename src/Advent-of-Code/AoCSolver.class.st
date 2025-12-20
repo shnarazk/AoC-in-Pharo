@@ -13,6 +13,14 @@ AoCSolver class >> day [
 ]
 
 { #category : 'accessing' }
+AoCSolver class >> projectDirecory [
+
+    | env |
+    env := Smalltalk os environment.
+    ^ env at: 'AOC_DIR' ifAbsent: [ env at: 'HOME' ]
+]
+
+{ #category : 'accessing' }
 AoCSolver class >> year [
 
     self subclassResponsibility
@@ -21,12 +29,11 @@ AoCSolver class >> year [
 { #category : 'reading' }
 AoCSolver >> inputData [
 
-    | u d |
-    u := Smalltalk os environment at: #USER.
+    | projectDirectory d |
+    projectDirectory := self class projectDirecory.
     d := self class day < 10 ifTrue: [ '0' , self class day asString ]
              ifFalse: [ self class day asString ].
-    ^ ('/Users/' , u , '/Repositories/advent-of-code/data/' , self class year asString , '/input-day' , d , '.txt') asFileReference
-          contents
+    ^ (projectDirectory , '/data/' , self class year asString , '/input-day' , d , '.txt') asFileReference contents
 ]
 
 { #category : 'accessing' }

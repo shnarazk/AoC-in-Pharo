@@ -5,7 +5,7 @@ expanding tree nodes problem.
 "
 Class {
 	#name : 'Y2024Day07',
-	#superclass : 'Object',
+	#superclass : 'AoCSolver',
 	#instVars : [
 		'lines'
 	],
@@ -13,6 +13,12 @@ Class {
 	#package : 'Advent-of-Code',
 	#tag : 'Y2024'
 }
+
+{ #category : 'accessing' }
+Y2024Day07 class >> day [
+
+    ^ 7
+]
 
 { #category : 'tests' }
 Y2024Day07 class >> test1 [
@@ -30,10 +36,10 @@ Y2024Day07 class >> test1 [
 292: 11 6 16 20'
 ]
 
-{ #category : 'reading' }
-Y2024Day07 >> inputData [
+{ #category : 'accessing' }
+Y2024Day07 class >> year [
 
-    ^ '/Users/nash/Repositories/advent-of-code/data/2024/input-day07.txt' asFileReference contents
+    ^ 2024
 ]
 
 { #category : 'accessing' }
