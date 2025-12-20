@@ -1,7 +1,7 @@
 "
 expanding tree nodes problem.
 
-幅優先でないならA*?
+幅優先でないならA* search!
 "
 Class {
 	#name : 'Y2024Day07',
@@ -22,10 +22,9 @@ Y2024Day07 class >> day [
 
 { #category : 'tests' }
 Y2024Day07 class >> test1 [
+    "return the first test data"
 
-"return the first test data"
-
-	^ '190: 10 19
+    ^ '190: 10 19
 3267: 81 40 27
 83: 17 5
 156: 15 6
