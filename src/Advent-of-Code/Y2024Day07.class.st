@@ -39,6 +39,12 @@ Y2024Day07 >> getInputData [
 	^ data
 ]
 
+{ #category : 'reading' }
+Y2024Day07 >> inputData [
+
+    ^ '/Users/nash/Repositories/advent-of-code/data/2024/input-day07.txt' asFileReference contents
+]
+
 { #category : 'accessing' }
 Y2024Day07 >> line: anInteger [
 
@@ -53,69 +59,65 @@ Y2024Day07 >> lines [
 
 { #category : 'parsing' }
 Y2024Day07 >> parse: aString [
-	"parse input data and store the result into local variables"
+    "parse input data and store the result into local variables"
 
-	| number line numbers parser |
-	number := #digit asPParser star token ==> [ :token | token value asNumber ].
-	numbers := (number separatedBy: ' ' asPParser) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].
-	line := (number trim: ': ' asPParser) , numbers.
-	parser := (line delimitedBy: Character cr asPParser | Character lf asPParser)
-	          ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].
-	lines := parser parse: aString trim.
-	^ lines size
+    lines := self parser parse: aString trim.
+    ^ lines size
+]
+
+{ #category : 'parsing' }
+Y2024Day07 >> parser [
+    "return the parser"
+
+    | number line numbers |
+    number := #digit asPParser star token ==> [ :token | token value asNumber ].
+    numbers := (number separatedBy: ' ' asPParser) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].
+    line := (number trim: ': ' asPParser) , numbers.
+    ^ (line delimitedBy: Character cr asPParser | Character lf asPParser)
+      ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ]
 ]
 
 { #category : 'executing' }
 Y2024Day07 >> part1 [
 
-	^ (lines collect: [ :setting |
-			   | target values |
-			   "292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20"
-			   target := setting first.
-			   values := Set new
-				             add: setting last first;
-				             yourself.
-			   setting last from: 2 to: setting last size do: [ :each |
-					   values := values inject: Set new into: [ :acc :val |
-							             acc
-								             add: val + each;
-								             add: val * each;
-								             yourself ].
-					   values := values select: [ :val | val <= target ] ].
-			   (values includes: target)
-				   ifTrue: [ target ]
-				   ifFalse: [ 0 ] ]) sum
+    lines ifNil: [ self parse: self inputData ].
+    ^ (lines collect: [ :setting |
+               | target values |
+               "292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20"
+               target := setting first.
+               values := Set new add: setting last first; yourself.
+               setting last from: 2 to: setting last size do: [ :each |
+                       values := values inject: Set new into: [ :acc :val | acc add: val + each; add: val * each; yourself ].
+                       values := values select: [ :val | val <= target ] ].
+               (values includes: target) ifTrue: [ target ]
+                   ifFalse: [ 0 ] ]) sum
 ]
 
 { #category : 'executing' }
 Y2024Day07 >> part2 [
 
-	^ (lines collect: [ :setting |
-			   | target values |
-			   "292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20"
-			   target := setting first.
-			   values := Set new
-				             add: setting last first;
-				             yourself.
-			   setting last from: 2 to: setting last size do: [ :each |
-					   values := values inject: Set new into: [ :acc :val |
-							             acc
-								             add: val + each;
-								             add: val * each;
-								             add: (self shift: val and: each whichOriginal: each);
-								             yourself ].
-					   values := values select: [ :val | val <= target ] ].
-			   (values includes: target)
-				   ifTrue: [ target ]
-				   ifFalse: [ 0 ] ]) sum
+    lines ifNil: [ self parse: self inputData ].
+    ^ (lines collect: [ :setting |
+               | target values |
+               "292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20"
+               target := setting first.
+               values := Set new add: setting last first; yourself.
+               setting last from: 2 to: setting last size do: [ :each |
+                       values := values inject: Set new
+                                     into: [ :acc :val |
+                                         acc add: val + each; add: val * each; add:
+                                                 (self shift: val and: each whichOriginal: each); yourself ].
+                       values := values select: [ :val | val <= target ] ].
+               (values includes: target) ifTrue: [ target ]
+                   ifFalse: [ 0 ] ]) sum
 ]
 
 { #category : 'executing' }
 Y2024Day07 >> part2a [
 
+    lines ifNil: [ self parse: self inputData ].
     ^ (lines collect: [ :setting |
                | target values |
-               "292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20"
                target := setting first.
                values := Set new add: setting last first; yourself.
                self searchFrom: setting last first with: setting last allButFirst to: target ]) sum
