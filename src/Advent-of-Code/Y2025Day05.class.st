@@ -25,7 +25,7 @@ Y2025Day05 class >> year [
     ^ 2025
 ]
 
-{ #category : 'executing' }
+{ #category : 'parsing' }
 Y2025Day05 >> parse: aString [
 
   | result |
@@ -34,13 +34,13 @@ Y2025Day05 >> parse: aString [
   ids := result last
 ]
 
-{ #category : 'accessing' }
+{ #category : 'parsing' }
 Y2025Day05 >> parser [
   "return the parser"
 
   | newline number numbers firstPart secondPart |
   newline := Character cr asPParser | Character lf asPParser.
-  number := #digit asPParser plus token ==> [ :token | token value asNumber ].
+  number := #digit asPParser plus ==> [ :collection | collection inject: 0 into: [ :acc :n | acc * 10 + (n asciiValue - $0 asciiValue) ] ].
   numbers := number , $- asPParser , number ==> [ :anArray | anArray first @ anArray last ].
   firstPart := (numbers delimitedBy: newline) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].
   secondPart := (number delimitedBy: newline) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].

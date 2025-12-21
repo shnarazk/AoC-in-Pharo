@@ -21,7 +21,7 @@ Y2025Day04 class >> year [
     ^ 2025
 ]
 
-{ #category : 'accessing' }
+{ #category : 'parsing' }
 Y2025Day04 >> parser [
 
     

@@ -59,7 +59,7 @@ AoCSolver >> inputData: aNumberOrString [
     ^ (dataDirectory , self class year asString , '/input-day' , d , '-' , alt , '.txt') asFileReference contents
 ]
 
-{ #category : 'accessing' }
+{ #category : 'parsing' }
 AoCSolver >> parser [
 
     self subclassResponsibility

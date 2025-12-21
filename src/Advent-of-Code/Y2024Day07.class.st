@@ -66,7 +66,8 @@ Y2024Day07 >> parser [
   "return the parser"
 
   | number line numbers |
-  number := #digit asPParser star token ==> [ :token | token value asNumber ].
+  number := #digit asPParser plus ==> [ :collection | collection inject: 0 into: [ :acc :n | acc * 10 + (n asciiValue - $0 asciiValue) ] ].
+  "number := #digit asPParser star token ==> [ :token | token value asNumber ]."
   numbers := (number separatedBy: ' ' asPParser) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ].
   line := (number trim: ': ' asPParser) , numbers.
   ^ (line delimitedBy: Character cr asPParser | Character lf asPParser) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ]
