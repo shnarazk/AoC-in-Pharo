@@ -25,6 +25,15 @@ Y2025Day05 class >> year [
     ^ 2025
 ]
 
+{ #category : 'executing' }
+Y2025Day05 >> nodeHeap [
+  "return sorted collection of occured numbers tagged with start-node or end-node"
+
+  ids ifNil: [ self parse: self inputData ].
+  ^ ranges inject: (SortedCollection sortUsing: [ :a :b | a x < b x or: [ a x == b x and: [ a y < b y ] ] ])
+      into: [ :acc :each | acc addAll: { each x @ 0. each y @ 1 }; yourself ]
+]
+
 { #category : 'parsing' }
 Y2025Day05 >> parse: aString [
 
@@ -57,11 +66,9 @@ Y2025Day05 >> part1 [
 { #category : 'executing' }
 Y2025Day05 >> part2 [
 
-  | heap result |
+  | result |
   ids ifNil: [ self parse: self inputData ].
-  heap := ranges inject: (SortedCollection sortUsing: [ :a :b | a x < b x or: [ a x == b x and: [ a y < b y ] ] ])
-            into: [ :acc :each | acc addAll: { each x @ 0. each y @ 1 }; yourself ].
-  result := heap inject: { #level -> 0. #start -> nil. #sum -> 0 } asDictionary into: [ :acc :node |
+  result := self nodeHeap inject: { #level -> 0. #start -> nil. #sum -> 0 } asDictionary into: [ :acc :node |
                 node y == 0
                   ifTrue: [ "start a new segment"
                       acc at: #level update: [ :level | level + 1 ].

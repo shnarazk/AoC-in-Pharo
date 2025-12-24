@@ -95,6 +95,17 @@ Y2024Day07 >> part2 [
   lines ifNil: [ self parse: self inputData ].
   ^ (lines collect: [ :setting |
          | target values |
+         target := setting first.
+         values := Set new add: setting last first; yourself.
+         self searchFrom: setting last first with: setting last allButFirst to: target ]) sum
+]
+
+{ #category : 'executing' }
+Y2024Day07 >> part2Old [
+
+  lines ifNil: [ self parse: self inputData ].
+  ^ (lines collect: [ :setting |
+         | target values |
          "292: 11 6 16 20 can be solved in exactly one way: 11 + 6 * 16 + 20"
          target := setting first.
          values := Set new add: setting last first; yourself.
@@ -104,17 +115,6 @@ Y2024Day07 >> part2 [
              values := values select: [ :val | val <= target ] ].
          (values includes: target) ifTrue: [ target ]
            ifFalse: [ 0 ] ]) sum
-]
-
-{ #category : 'executing' }
-Y2024Day07 >> part2a [
-
-  lines ifNil: [ self parse: self inputData ].
-  ^ (lines collect: [ :setting |
-         | target values |
-         target := setting first.
-         values := Set new add: setting last first; yourself.
-         self searchFrom: setting last first with: setting last allButFirst to: target ]) sum
 ]
 
 { #category : 'executing' }
