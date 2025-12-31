@@ -1,3 +1,6 @@
+"
+Abstract class for solving Advent-of-Code puzzles
+"
 Class {
 	#name : 'AoCSolver',
 	#superclass : 'Object',
