@@ -14,14 +14,6 @@ Class {
 }
 
 { #category : 'building' }
-ILPSolver >> buildSubProblem [
-    "return the equations stripped the first elements from all arrays in #coeffs"
-
-    ^ equations collect: [ :equation |
-              { #coeffs -> (equation at: #coeffs) allButFirst. #value -> (equation at: #value). } asDictionary ]
-]
-
-{ #category : 'building' }
 ILPSolver >> buildSubProblem: eliminator [
     "return the equations stripped the first elements from all arrays in #coeffs"
 
@@ -85,11 +77,12 @@ ILPSolver >> numberOfVariables: anObject [
 { #category : 'executing' }
 ILPSolver >> solve [
 
-    | subSolver |
+    | subSolver eliminator |
     numberOfVariables == 1 ifTrue: [ ^ self solveOneVariableEquation ].
     self sortEquations.
+    eliminator := equations first.
     subSolver := self class new.
-    subSolver equations: self buildSubProblem.
+    subSolver equations: (self buildSubProblem: eliminator).
     ^ 1
 ]
 
