@@ -21,6 +21,22 @@ ILPSolverTest >> setUp [
 ]
 
 { #category : 'tests' }
+ILPSolverTest >> testBuildSubProblem [
+
+    | eliminator equation1 equation2 equation3 subproblem |
+    solver numberOfVariables: 3.
+    eliminator := { #coeffs -> { 1. 0. 2 } asArray. #value -> 1 } asDictionary.
+    equation1 := { #coeffs -> { 1. 1. 2 } asArray. #value -> 3 } asDictionary.
+    equation2 := solver emptyEquation.
+    equation3 := { #coeffs -> { 2. 2. 3 } asArray. #value -> 5 } asDictionary.
+    solver equations: { equation1. equation2. equation3 } asArray.
+    subproblem := solver buildSubProblem: eliminator.
+    self flag: #todo.
+    self assert: (subproblem first at: #coeffs) equals: { #coeffs -> { 1. 1 } asArray. #value -> 3 } asDictionary.
+    self assert: ((subproblem at: 3) at: #coeffs) equals: { #coeffs -> { 1. 1 } asArray. #value -> 3 } asDictionary
+]
+
+{ #category : 'tests' }
 ILPSolverTest >> testSolveOneVariableEquation [
 
     self testSolveOneVariableEquation1.

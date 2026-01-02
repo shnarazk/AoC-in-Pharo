@@ -13,20 +13,43 @@ Class {
 	#tag : 'Tool'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'building' }
 ILPSolver >> buildSubProblem [
+    "return the equations stripped the first elements from all arrays in #coeffs"
 
-    ^ equations
+    ^ equations collect: [ :equation |
+              { #coeffs -> (equation at: #coeffs) allButFirst. #value -> (equation at: #value). } asDictionary ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'building' }
+ILPSolver >> buildSubProblem: eliminator [
+    "return the equations stripped the first elements from all arrays in #coeffs"
+
+    | c1 e1 v1 |
+    c1 := (eliminator at: #coeffs) first.
+    e1 := (eliminator at: #coeffs) allButFirst.
+    v1 := eliminator at: #value.
+    ^ equations collect: [ :equation |
+              (equation at: #coeffs) first == 0 ifTrue: [
+                      { #coeffs -> (equation at: #coeffs) allButFirst. #value -> (equation at: #value) } asDictionary ]
+                  ifFalse: [
+                          | scale coeffs s1 s2 value |
+                          scale := c1 lcm: (equation at: #coeffs) first.
+                          s1 := scale / c1.
+                          s2 := scale / (equation at: #coeffs) first.
+                          coeffs := (equation at: #coeffs) allButFirst with: e1 collect: [ :a :e | a * s2 - (e * s1) ].
+                          value := (equation at: #value) * s2 - (v1 * s1).
+                          { #coeffs -> coeffs. #value -> value } asDictionary ] ]
+]
+
+{ #category : 'building' }
 ILPSolver >> emptyEquation [
     "return an empty equation"
 
     ^ self emptyEquation: numberOfVariables
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'building' }
 ILPSolver >> emptyEquation: size [
     "return an empty `size`-variable equation"
 
@@ -42,9 +65,9 @@ ILPSolver >> equations [
 ]
 
 { #category : 'accessing' }
-ILPSolver >> equations: anObject [
+ILPSolver >> equations: anArray [
 
-	equations := anObject
+	equations := anArray
 ]
 
 { #category : 'accessing' }
@@ -59,7 +82,7 @@ ILPSolver >> numberOfVariables: anObject [
 	numberOfVariables := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'executing' }
 ILPSolver >> solve [
 
     | subSolver |
@@ -70,7 +93,7 @@ ILPSolver >> solve [
     ^ 1
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'executing' }
 ILPSolver >> solveOneVariableEquation [
 
     | coeff value |
