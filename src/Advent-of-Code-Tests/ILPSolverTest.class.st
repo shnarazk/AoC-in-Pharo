@@ -44,6 +44,29 @@ ILPSolverTest >> testBuildSubProblem [
 ]
 
 { #category : 'tests' }
+ILPSolverTest >> testBuildSubProblem1 [
+    "1x + 0y + 2z = 1
+    1x + 1y + 2z = 3
+    0x + 0y + 0z = 0
+    2x + 2y + 3z = 5
+    
+    1y + 0z = 2
+    0y + 0z = 0
+    2y - 1z = 3"
+
+    | eliminator equation1 equation2 equation3 subproblem |
+    solver numberOfVariables: 3.
+    eliminator := { #coeffs -> { 1. 0. 2 } asArray. #value -> 1 } asDictionary.
+    equation1 := { #coeffs -> { 1. 1. 2 } asArray. #value -> 3 } asDictionary.
+    equation2 := solver emptyEquation.
+    equation3 := { #coeffs -> { 2. 2. 3 } asArray. #value -> 5 } asDictionary.
+    subproblem := solver equations: { equation1. equation2. equation3 } asArray; buildSubProblem: eliminator.
+    self assert: subproblem first equals: { #coeffs -> { 1. 0 } asArray. #value -> 2 } asDictionary.
+    self assert: (subproblem at: 2) equals: { #coeffs -> { 0. 0 } asArray. #value -> 0 } asDictionary.
+    self assert: (subproblem at: 3) equals: { #coeffs -> { 2. -1 } asArray. #value -> 3 } asDictionary
+]
+
+{ #category : 'tests' }
 ILPSolverTest >> testSolveOneVariableEquation [
 
     self testSolveOneVariableEquation1.
