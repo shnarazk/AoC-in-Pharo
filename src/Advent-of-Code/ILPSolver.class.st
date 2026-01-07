@@ -14,31 +14,45 @@ Class {
 }
 
 { #category : 'building' }
-ILPSolver >> buildSubProblem: eliminator [
-    "return the equations stripped the first elements from all arrays in #coeffs"
+ILPSolver >> buildSubProblem [
+    "return the reduced myself stripped the first elements from all arrays in #coeffs "
 
-    | c1 e1 v1 |
+    | eliminator subequations |
+    self sortEquations.
+    eliminator := equations first.
+    subequations := equations allButFirst.
+    ^ self buildSubProblemOf: subequations by: eliminator
+]
+
+{ #category : 'building' }
+ILPSolver >> buildSubProblemOf: targetEquations by: eliminator [
+    "return the reduced myself of `targetEquations` stripped the first elements from all arrays in #coeffs based on e`liminator`"
+
+    | c1 e1 v1 eqs instance |
     c1 := (eliminator at: #coeffs) first.
     e1 := (eliminator at: #coeffs) allButFirst.
     v1 := eliminator at: #value.
-    ^ equations collect: [ :equation |
-              (equation at: #coeffs) first == 0 ifTrue: [
-                      { #coeffs -> (equation at: #coeffs) allButFirst. #value -> (equation at: #value) } asDictionary ]
-                  ifFalse: [
-                          | scale coeffs s1 s2 value |
-                          scale := c1 lcm: (equation at: #coeffs) first.
-                          s1 := scale / c1.
-                          s2 := scale / (equation at: #coeffs) first.
-                          coeffs := (equation at: #coeffs) allButFirst with: e1 collect: [ :a :e | a * s2 - (e * s1) ].
-                          value := (equation at: #value) * s2 - (v1 * s1).
-                          { #coeffs -> coeffs. #value -> value } asDictionary ] ]
+    eqs := targetEquations collect: [ :equation |
+                   (equation at: #coeffs) first == 0 ifTrue: [
+                           { #coeffs -> (equation at: #coeffs) allButFirst. #value -> (equation at: #value) } asDictionary ]
+                       ifFalse: [
+                               | scale coeffs s1 s2 value |
+                               scale := c1 lcm: (equation at: #coeffs) first.
+                               s1 := scale / c1.
+                               s2 := scale / (equation at: #coeffs) first.
+                               coeffs := (equation at: #coeffs) allButFirst with: e1 collect: [ :a :e | a * s2 - (e * s1) ].
+                               value := (equation at: #value) * s2 - (v1 * s1).
+                               { #coeffs -> coeffs. #value -> value } asDictionary ] ].
+    instance := self class new.
+    instance numberOfVariables: numberOfVariables - 1; equations: eqs.
+    ^ instance
 ]
 
 { #category : 'building' }
 ILPSolver >> emptyEquation [
     "return an empty equation"
 
-    ^ self emptyEquation: numberOfVariables
+    ^ self emptyEquation: self numberOfVariables
 ]
 
 { #category : 'building' }
@@ -64,25 +78,27 @@ ILPSolver >> equations: anArray [
 
 { #category : 'accessing' }
 ILPSolver >> numberOfVariables [
+    "return the number of variables. It is defined by the number of the equations."
 
-	^ numberOfVariables
+    ^ numberOfVariables
 ]
 
 { #category : 'accessing' }
-ILPSolver >> numberOfVariables: anObject [
+ILPSolver >> numberOfVariables: aNumber [
+    "return the number of variables. It is defined by the number of the equations."
 
-	numberOfVariables := anObject
+    numberOfVariables := aNumber
 ]
 
 { #category : 'executing' }
 ILPSolver >> solve [
 
     | subSolver eliminator |
-    numberOfVariables == 1 ifTrue: [ ^ self solveOneVariableEquation ].
+    self numberOfVariables == 1 ifTrue: [ ^ self solveOneVariableEquation ].
     self sortEquations.
     eliminator := equations first.
     subSolver := self class new.
-    subSolver equations: (self buildSubProblem: eliminator).
+    subSolver equations: (self buildSubProblemBy: eliminator).
     ^ 1
 ]
 
