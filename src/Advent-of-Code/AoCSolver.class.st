@@ -1,5 +1,17 @@
 "
-Abstract class for solving Advent-of-Code puzzles
+Abstract class for solving Advent-of-Code puzzles.
+## Configuration
+
+1. Set `year` and `day`
+2. Define `parser`
+3. Define `part1` and `part2`
+
+So far, `part1` and `part2` are the top level interface. So usually execute:
+
+```
+Y20XXDayXX new part1; part2
+```
+
 "
 Class {
 	#name : 'AoCSolver',

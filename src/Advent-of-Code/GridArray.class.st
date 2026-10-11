@@ -1,3 +1,6 @@
+"
+I am a class of 2D Array.
+"
 Class {
 	#name : 'GridArray',
 	#superclass : 'Array',
