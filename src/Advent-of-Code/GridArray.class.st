@@ -1,5 +1,11 @@
 "
-I am a class of 2D Array.
+I am a class of 2D Array supporting Point-based indexing.
+
+1. create with `aGrid := GridArray new: 10@10 with: 0`.
+2. set with `aGrid at: 2@4 :put 10`
+3. get with `atgrid at: 1@1`
+
+
 "
 Class {
 	#name : 'GridArray',
@@ -16,7 +22,24 @@ Class {
 }
 
 { #category : 'instance creation' }
+GridArray class >> from: aCollectionOfCollections [
+    "return an instance initialized with aCollectionOfCollections (a 2D collection)"
+
+    | height width instance |
+    height := aCollectionOfCollections size.
+    width := aCollectionOfCollections first size.
+    instance := self new: width * height.
+    instance height: height.
+    instance width: width.
+    aCollectionOfCollections withIndexDo: [ :aCollection :y |
+        aCollection withIndexDo: [ :value :x | instance atGrid: x @ y put: value ] ].
+    ^ instance
+]
+
+{ #category : 'instance creation' }
 GridArray class >> new: aPoint with: aValue [
+
+"return a new instance which geometory is aPoint and filled with aValue"
 
     | instance |
     instance := self new: aPoint x * aPoint y.
@@ -24,6 +47,19 @@ GridArray class >> new: aPoint with: aValue [
     instance atAllPut: aValue.
 
     ^ instance
+]
+
+{ #category : 'accessing' }
+GridArray >> atGrid: aPoint [
+    "get an element at aPoint"
+
+    ^ self at: aPoint y - 1 * width + aPoint x
+]
+
+{ #category : 'accessing' }
+GridArray >> atGrid: aPoint put: aValue [
+
+    ^ self at: aPoint y - 1 * width + aPoint x put: aValue
 ]
 
 { #category : 'accessing' }
@@ -56,14 +92,14 @@ GridArray >> width: aNumber [
     width := aNumber
 ]
 
-{ #category : 'accessing' }
+{ #category : 'deprecated' }
 GridArray >> x: xIndex y: yIndex [
 
-    ^ self at: yIndex - 1 * width + xIndex
+    ^ self atGrid: (yIndex - 1) * width + xIndex
 ]
 
-{ #category : 'accessing' }
+{ #category : 'deprecated' }
 GridArray >> x: xIndex y: yIndex put: aValue [
 
-    ^ self at: yIndex - 1 * width + xIndex put: aValue
+    ^ self atGrid: (yIndex - 1) * width + xIndex put: aValue
 ]

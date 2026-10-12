@@ -56,14 +56,14 @@ Y2025Day05 >> parser [
   ^ firstPart , newline , secondPart ==> [ :anArray | { anArray first. anArray last } ]
 ]
 
-{ #category : 'executing' }
+{ #category : 'public - executing' }
 Y2025Day05 >> part1 [
 
   ids ifNil: [ self parse: self inputData ].
   ^ ids count: [ :each | ranges anySatisfy: [ :range | each between: range x and: range y ] ]
 ]
 
-{ #category : 'executing' }
+{ #category : 'public - executing' }
 Y2025Day05 >> part2 [
 
   | result |
@@ -72,10 +72,10 @@ Y2025Day05 >> part2 [
                 node y == 0
                   ifTrue: [ "start a new segment"
                       acc at: #level update: [ :level | level + 1 ].
-                      (acc at: #level) == 1 ifTrue: [ acc at: #start put: node x ] ]
+                      (acc atGrid: #level) == 1 ifTrue: [ acc atGrid: #start put: node x ] ]
                   ifFalse: [ "end of a segment"
                       acc at: #level update: [ :level | level - 1 ].
-                      (acc at: #level) == 0 ifTrue: [ acc at: #sum update: [ :sum | sum + node x - (acc at: #start) + 1 ] ] ].
+                      (acc atGrid: #level) == 0 ifTrue: [ acc at: #sum update: [ :sum | sum + node x - (acc atGrid: #start) + 1 ] ] ].
                 acc ].
-  ^ result at: #sum
+  ^ result atGrid: #sum
 ]

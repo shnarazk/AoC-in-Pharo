@@ -1,3 +1,6 @@
+"
+WIP
+"
 Class {
 	#name : 'Y2025Day04',
 	#superclass : 'AoCSolver',
@@ -24,5 +27,21 @@ Y2025Day04 class >> year [
 { #category : 'parsing' }
 Y2025Day04 >> parser [
 
+    | newline line |
+    newline := Character cr asPParser | Character lf asPParser.
+    line := ($. asPParser ==> [ :p | false ] | ($@ asPParser ==> [ :a | true ])) plus , newline.
+    ^ line plus ==> [ :aCollection | GridArray from: aCollection ]
+]
+
+{ #category : 'public - executing' }
+Y2025Day04 >> part1 [
+^ 1
+
     
+]
+
+{ #category : 'public - executing' }
+Y2025Day04 >> part2 [
+
+    ^2
 ]

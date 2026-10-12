@@ -44,7 +44,7 @@ Y2024Day07 class >> year [
 { #category : 'accessing' }
 Y2024Day07 >> line: anInteger [
 
-  ^ lines at: anInteger
+  ^ lines atGrid: anInteger
 ]
 
 { #category : 'accessing' }
@@ -73,7 +73,7 @@ Y2024Day07 >> parser [
   ^ (line delimitedBy: Character cr asPParser | Character lf asPParser) ==> [ :collection | collection withIndexSelect: [ :each :i | i odd ] ]
 ]
 
-{ #category : 'executing' }
+{ #category : 'public - executing' }
 Y2024Day07 >> part1 [
 
   lines ifNil: [ self parse: self inputData ].
@@ -89,7 +89,7 @@ Y2024Day07 >> part1 [
            ifFalse: [ 0 ] ]) sum
 ]
 
-{ #category : 'executing' }
+{ #category : 'public - executing' }
 Y2024Day07 >> part2 [
 
   lines ifNil: [ self parse: self inputData ].
@@ -143,7 +143,7 @@ Y2024Day07 >> searchFrom: aNumber with: numbers to: target [
       state last = goalState last ifTrue: [ state first = goalState first ifTrue: [ ^ target ] ]
         ifFalse: [
             | operand |
-            operand := numbers at: state last.
+            operand := numbers atGrid: state last.
             toVisit addAll: ({ state first + operand. state first * operand. self shift: state first and: operand } select: [ :next | next <= target ]
                  thenCollect: [ :val | { val. state last + 1 } ]) ] ].
   ^ 0

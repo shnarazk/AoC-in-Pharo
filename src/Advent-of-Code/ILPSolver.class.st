@@ -29,19 +29,19 @@ ILPSolver >> buildSubProblemOf: targetEquations by: eliminator [
     "return the reduced myself of `targetEquations` stripped the first elements from all arrays in #coeffs based on e`liminator`"
 
     | c1 e1 v1 eqs instance |
-    c1 := (eliminator at: #coeffs) first.
-    e1 := (eliminator at: #coeffs) allButFirst.
-    v1 := eliminator at: #value.
+    c1 := (eliminator atGrid: #coeffs) first.
+    e1 := (eliminator atGrid: #coeffs) allButFirst.
+    v1 := eliminator atGrid: #value.
     eqs := targetEquations collect: [ :equation |
-                   (equation at: #coeffs) first == 0 ifTrue: [
-                           { #coeffs -> (equation at: #coeffs) allButFirst. #value -> (equation at: #value) } asDictionary ]
+                   (equation atGrid: #coeffs) first == 0 ifTrue: [
+                           { #coeffs -> (equation atGrid: #coeffs) allButFirst. #value -> (equation atGrid: #value) } asDictionary ]
                        ifFalse: [
                                | scale coeffs s1 s2 value |
-                               scale := c1 lcm: (equation at: #coeffs) first.
+                               scale := c1 lcm: (equation atGrid: #coeffs) first.
                                s1 := scale / c1.
-                               s2 := scale / (equation at: #coeffs) first.
-                               coeffs := (equation at: #coeffs) allButFirst with: e1 collect: [ :a :e | a * s2 - (e * s1) ].
-                               value := (equation at: #value) * s2 - (v1 * s1).
+                               s2 := scale / (equation atGrid: #coeffs) first.
+                               coeffs := (equation atGrid: #coeffs) allButFirst with: e1 collect: [ :a :e | a * s2 - (e * s1) ].
+                               value := (equation atGrid: #value) * s2 - (v1 * s1).
                                { #coeffs -> coeffs. #value -> value } asDictionary ] ].
     instance := self class new.
     instance numberOfVariables: numberOfVariables - 1; equations: eqs.
@@ -106,8 +106,8 @@ ILPSolver >> solve [
 ILPSolver >> solveOneVariableEquation [
 
     | coeff value |
-    coeff := (equations first at: #coeffs) first.
-    value := equations first at: #value.
+    coeff := (equations first atGrid: #coeffs) first.
+    value := equations first atGrid: #value.
     (value isDivisibleBy: coeff) ifTrue: [ ^ value / coeff ]
         ifFalse: [ self error: 'not integer problem' ]
 ]
@@ -120,7 +120,7 @@ ILPSolver >> sortEquations [
     found := OrderedCollection new.
     notFound := OrderedCollection new.
     equations do: [ :equation |
-            (equation at: #coeffs) first ~= 0 ifTrue: [ found add: equation ]
+            (equation atGrid: #coeffs) first ~= 0 ifTrue: [ found add: equation ]
                 ifFalse: [ notFound add: equation ] ].
     found addAllLast: notFound.
     equations := found asArray.

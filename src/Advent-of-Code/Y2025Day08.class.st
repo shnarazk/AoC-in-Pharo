@@ -49,7 +49,7 @@ Y2025Day08 >> parser [
 
 ]
 
-{ #category : 'executing' }
+{ #category : 'public - executing' }
 Y2025Day08 >> part1 [
 
     | dists limit |
@@ -60,7 +60,7 @@ Y2025Day08 >> part1 [
     ^ dists
 ]
 
-{ #category : 'executing' }
+{ #category : 'public - executing' }
 Y2025Day08 >> part2 [
 
     ^ 0
@@ -78,5 +78,5 @@ Y2025Day08 >> sortedBoxPairs [
                             | distance |
                             distance := (bi with: bj collect: [ :a :b | (a * a - (b * b)) abs ]) sum.
                             aCollection add: { #dist -> distance. #i -> i. #j -> j } asDictionary ] ] ].
-    ^ aCollection sort: [ :a :b | (a at: #dist) <= (b at: #dist) ]
+    ^ aCollection sort: [ :a :b | (a atGrid: #dist) <= (b atGrid: #dist) ]
 ]
